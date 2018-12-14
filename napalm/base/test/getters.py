@@ -19,13 +19,9 @@ from napalm.base.test import models
 from napalm.base import NetworkDriver
 
 # text_type is 'unicode' for py2 and 'str' for py3
-from napalm.base.utils.py23_compat import text_type
+from napalm.base.utils.py23_compat import text_type, argspec
 
 from napalm.base.test import conftest
-
-
-# inspect.getargspec deprecated in Python 3.5, use getfullargspec if available
-inspect_getargspec = getattr(inspect, "getfullargspec", inspect.getargspec)
 
 
 def list_dicts_diff(prv, nxt):
@@ -137,17 +133,17 @@ class BaseTestGetters(object):
                 continue
             try:
                 orig = getattr(NetworkDriver, attr)
-                orig_spec = inspect_getargspec(orig)
+                orig_spec = argspec(orig)
             except AttributeError:
                 orig_spec = 'Method does not exist in napalm.base'
-            func_spec = inspect_getargspec(func)
+            func_spec = argspec(func)
             if orig_spec != func_spec:
                 errors[attr] = (orig_spec, func_spec)
 
         EXTRA_METHODS = ['__init__', ]
         for method in EXTRA_METHODS:
-            orig_spec = inspect_getargspec(getattr(NetworkDriver, method))
-            func_spec = inspect_getargspec(getattr(cls, method))
+            orig_spec = argspec(getattr(NetworkDriver, method))
+            func_spec = argspec(getattr(cls, method))
             if orig_spec != func_spec:
                 errors[attr] = (orig_spec, func_spec)
 
@@ -456,7 +452,7 @@ class BaseTestGetters(object):
 
         for user, user_details in get_users.items():
             assert helpers.test_model(models.users, user_details)
-            assert (0 <= user_details.get('level') <= 15)
+            assert (0 <= user_details.get('level') <= 15) or (user_details.get('level') == 20)
 
         return get_users
 

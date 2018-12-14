@@ -17,19 +17,15 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from napalm.base.base import NetworkDriver
+from napalm.base.utils import py23_compat
 import napalm.base.exceptions
 
-import inspect
 import json
 import os
 import re
 
 
 from pydoc import locate
-
-
-# inspect.getargspec deprecated in Python 3.5, use getfullargspec if available
-inspect_getargspec = getattr(inspect, "getfullargspec", inspect.getargspec)
 
 
 def raise_exception(result):
@@ -49,7 +45,7 @@ def is_mocked_method(method):
 
 def mocked_method(path, name, count):
     parent_method = getattr(NetworkDriver, name)
-    parent_method_args = inspect_getargspec(parent_method)
+    parent_method_args = py23_compat.argspec(parent_method)
     modifier = 0 if 'self' not in parent_method_args.args else 1
 
     def _mocked_method(*args, **kwargs):
@@ -109,7 +105,7 @@ class MockDriver(NetworkDriver):
         self.hostname = hostname
         self.username = username
         self.password = password
-        self.path = optional_args["path"]
+        self.path = optional_args.get("path", "")
         self.profile = optional_args.get("profile", [])
         self.fail_on_open = optional_args.get("fail_on_open", False)
 
