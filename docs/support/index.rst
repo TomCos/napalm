@@ -125,6 +125,7 @@ ____________________________________
 * :code:`secret` (ios, nxos_ssh) - Password required to enter privileged exec (enable) (default: ``''``).
 * :code:`ssh_config_file` (ios, iosxr, junos, nxos_ssh) - File name of OpenSSH configuration file.
 * :code:`ssh_strict` (ios, iosxr, nxos_ssh) - Automatically reject unknown SSH host keys (default: ``False``, which means unknown SSH host keys will be accepted).
+* :code:`system_host_keys` (ios, iosxr, nxos_ssh) - Load host keys from the user's 'known_hosts' file (default: ``False``).
 * :code:`ssl_verify` (nxos) - Requests argument, enable the SSL certificates verification. See requests ssl-cert-verification for valide values (default: ``None`` equivalent to ``False``).
 * :code:`transport` (eos, ios, nxos) - Protocol to connect with (see `The transport argument`_ for more information).
 * :code:`use_keys` (ios, iosxr, nxos_ssh) - Paramiko argument, enable searching for discoverable private key files in ``~/.ssh/`` (default: ``False``).
